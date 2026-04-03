@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="UX Decision Journal: A practical template for documenting AI-related UX decisions. Compliant with EU AI Act, California SB 53, CCPA, and NIST AI RMF. April 2026." />
+  <title>UX Decision Journal — Documentation Template for AI Products | April 2026</title>
+  
+  <!-- FAVICON: D+J Monogram (themed) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%233b82f6'/%3E%3Cstop offset='100%25' stop-color='%2360a5fa'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='12' fill='%230f172a'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='system-ui,-apple-system,Segoe UI,Roboto' font-size='28' font-weight='700' fill='url(%23g)'%3EDJ%3C/text%3E%3C/svg%3E" />
+  <link rel="icon" media="(prefers-color-scheme: light)" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%232563eb'/%3E%3Cstop offset='100%25' stop-color='%233b82f6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='12' fill='%23f8fafc'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='system-ui,-apple-system,Segoe UI,Roboto' font-size='28' font-weight='700' fill='url(%23g)'%3EDJ%3C/text%3E%3C/svg%3E" />
+
+  <style>
+    /* ===== DESIGN SYSTEM — LINCOLN AUTO INSPIRED ===== */
+    :root {
+      --bg: #0f172a;
+      --bg-elevated: #1e293b;
+      --bg-gradient-mid: #1e293b;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-link: #3b82f6;
+      --text-link-hover: #2563eb;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --border: #334155;
+      --success: #10b981;
+      --warning: #f59e0b;
+      
+      --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      
+      --container-max: 720px;
+      --spacing-xs: 0.25rem;
+      --spacing-sm: 0.5rem;
+      --spacing-md: 1rem;
+      --spacing-lg: 1.5rem;
+      --spacing-xl: 2rem;
+      --spacing-2xl: 3rem;
+      
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+      --transition: 200ms ease-in-out;
+      --transition-slow: 400ms ease-out;
+      
+      --z-sticky: 200;
+      --z-modal: 300;
+      --z-overlay: 400;
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --bg-elevated: #ffffff;
+      --bg-gradient-mid: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --text-link: #3b82f6;
+      --text-link-hover: #1d4ed8;
+      --border: #cbd5e1;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--text);
+      background: var(--bg);
+      background-image: 
+        linear-gradient(45deg, var(--bg) 0%, var(--bg-gradient-mid) 50%, var(--bg) 100%),
+        radial-gradient(circle at 80% -10%, rgba(59, 130, 246, 0.08) 0%, transparent 60%);
+      background-attachment: fixed;
+      transition: background var(--transition), color var(--transition);
+      overflow-x: hidden;
+    }
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 0;
+      background: var(--accent);
+      color: white;
+      padding: var(--spacing-sm) var(--spacing-md);
+      z-index: var(--z-overlay);
+      transition: top var(--transition);
+      font-weight: 600;
+    }
+    .skip-link:focus { top: 0; }
+
+    /* ===== TYPOGRAPHY ===== */
+    h1, h2, h3, h4 {
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: var(--spacing-md);
+      color: var(--text);
+    }
+    h1 { font-size: clamp(1.75rem, 4vw, 2.25rem); }
+    h2 { font-size: clamp(1.35rem, 3vw, 1.75rem); }
+    h3 { 
+      font-size: 1.125rem;
+      margin-top: var(--spacing-lg);
+      margin-bottom: var(--spacing-md);
+      line-height: 1.4;
+    }
+    section h3:first-of-type { margin-top: 0; }
+    p { margin-bottom: var(--spacing-md); color: var(--text-muted); }
+    
+    /* Links: #3b82f6 ONLY + smooth underline with proper spacing - INLINE ONLY */
+    a {
+      color: #3b82f6;
+      text-decoration: none;
+      position: relative;
+      display: inline;
+      transition: color var(--transition);
+    }
+    a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: #3b82f6;
+      transition: width var(--transition-slow);
+    }
+    a:hover { color: #2563eb; }
+    a:hover::after { width: 100%; }
+    a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    /* ===== LAYOUT ===== */
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 24px 20px 64px;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      padding: 24px 0 16px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--spacing-md);
+      flex-wrap: wrap;
+    }
+    .header-title h1 { margin-bottom: 4px; }
+    .header-title p { margin: 0; font-size: 0.95rem; }
+    
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      flex-wrap: wrap;
+    }
+    .theme-toggle, .print-btn {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all var(--transition);
+    }
+    .theme-toggle:hover, .print-btn:hover {
+      border-color: var(--accent);
+      background: var(--bg);
+      transform: translateY(-1px);
+    }
+    .theme-toggle:focus-visible, .print-btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* ===== SECTIONS ===== */
+    section {
+      margin-bottom: 32px;
+      padding: 24px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ===== REGULATIONS GRID ===== */
+    .reg-grid { 
+      display: grid; 
+      gap: 16px; 
+      margin-top: 12px; 
+    }
+    .reg-card {
+      padding: 16px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .reg-card:hover {
+      border-color: var(--accent);
+      box-shadow: var(--shadow-md);
+    }
+    .reg-card h4 { 
+      font-size: 1rem; 
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    .reg-card p { margin-bottom: 8px; }
+    .source-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin: 12px 0 4px 0;
+    }
+    .reg-card .source {
+      display: inline-block;
+      font-size: 0.9rem;
+      color: #3b82f6;
+      word-break: break-all;
+      margin-bottom: 8px;
+    }
+
+    /* ===== FORM ===== */
+    .journal-form { display: grid; gap: 20px; }
+    .form-group { display: grid; gap: 8px; }
+    label {
+      font-weight: 500;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    label .required { color: var(--warning); font-weight: 600; }
+    
+    input, textarea, select {
+      width: 100%;
+      padding: 12px 14px;
+      font-family: inherit;
+      font-size: 1rem;
+      color: var(--text);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .alternatives-list { display: grid; gap: 12px; margin-top: 8px; }
+    .alternative-item {
+      padding: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .compliance-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 640px) { .compliance-row { grid-template-columns: 1fr; } }
+
+    /* ===== ACTIONS ===== */
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 20px;
+      font-weight: 600;
+      font-size: 1rem;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition);
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+    .btn-secondary {
+      background: var(--bg-elevated);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      background: var(--bg);
+    }
+
+    /* ===== LISTS WITH PROPER PADDING ===== */
+    ul, ol {
+      padding-left: 1.5rem;
+      margin-bottom: var(--spacing-md);
+    }
+    li {
+      margin-bottom: var(--spacing-sm);
+      color: var(--text-muted);
+    }
+    li:last-child { margin-bottom: 0; }
+
+    /* ===== FOOTER & ATTRIBUTION ===== */
+    .footer-note {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+    .author-credit {
+      margin-top: 12px;
+      font-size: 0.9rem;
+    }
+    .author-credit a { font-weight: 500; }
+
+    /* ===== PRINT STYLES — CRITICAL FIXES (2cm margins, NO borders) ===== */
+    @media print {
+      @page { 
+        margin: 2cm 2cm 2cm 2cm;
+        size: A4; 
+      }
+      body {
+        background: white !important;
+        color: black !important;
+        background-image: none !important;
+        font-size: 11pt;
+        line-height: 1.5;
+        padding: 0;
+        width: 100%;
+        max-width: none;
+      }
+      header .header-actions, .actions, .download-section { display: none !important; }
+      header {
+        border-bottom: none !important;
+        padding: 0 0 16px 0;
+        margin-bottom: 24px;
+      }
+      section {
+        box-shadow: none !important;
+        border: none !important;
+        page-break-inside: avoid;
+        background: white !important;
+        color: black !important;
+        margin-bottom: 24px;
+        padding: 0;
+      }
+      a { 
+        text-decoration: underline !important; 
+        color: #0066cc !important;
+      }
+      a::after { display: none !important; }
+      input, textarea, select {
+        border: none !important;
+        border-bottom: 1px solid #ccc !important;
+        background: white !important;
+        color: black !important;
+        padding: 8px 0;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        resize: none;
+      }
+      .reg-card {
+        border: none !important;
+        background: white !important;
+        padding: 12px 0;
+        box-shadow: none !important;
+      }
+      .reg-grid {
+        gap: 20px;
+      }
+      .container { 
+        padding: 0; 
+        max-width: none;
+        width: 100%;
+      }
+      h1, h2, h3 { color: black !important; }
+      p, li { color: black !important; }
+      h1 { font-size: 18pt; }
+      h2 { font-size: 14pt; }
+      h3 { font-size: 12pt; }
+      p, h1, h2, h3, h4, li {
+        orphans: 3;
+        widows: 3;
+      }
+      section {
+        page-break-before: avoid;
+      }
+      section:first-of-type {
+        page-break-before: avoid;
+      }
+      .source-label {
+        color: #333 !important;
+        font-weight: 600;
+      }
+      .reg-card .source {
+        color: #0066cc !important;
+      }
+      .journal-form {
+        gap: 16px;
+      }
+      .form-group {
+        page-break-inside: avoid;
+      }
+      .alternative-item {
+        border: none !important;
+        background: white !important;
+        padding: 8px 0;
+      }
+      .btn {
+        display: none !important;
+      }
+      .footer-note {
+        border-top: 1px solid #ccc !important;
+        margin-top: 32px;
+        padding-top: 16px;
+      }
+    }
+
+    /* ===== ACCESSIBILITY & REDUCED MOTION ===== */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      a::after { transition: none !important; }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 640px) {
+      header { flex-direction: column; align-items: flex-start; }
+      .header-actions { width: 100%; justify-content: flex-start; }
+      .actions { flex-direction: column; }
+      .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  
+  <div class="container">
+    <!-- HEADER -->
+    <header>
+      <div class="header-title">
+        <h1>UX Decision Journal</h1>
+        <p>Documentation template for AI-related UX decisions. Built for compliance with EU AI Act, California SB 53, CCPA, and NIST AI RMF.</p>
+      </div>
+      <div class="header-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <span aria-hidden="true">🌓</span> Theme
+        </button>
+        <button class="print-btn" id="printBtn" aria-label="Print or save as PDF">
+          <span aria-hidden="true">🖨️</span> Print / Save PDF
+        </button>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- PURPOSE -->
+      <section>
+        <h2>Purpose of This Template</h2>
+        <p>This cheat sheet provides a precise, up-to-date reference for teams building digital products with AI capabilities. It helps systematically document UX decisions tied to AI features—supporting alignment with current regulatory expectations around transparency, risk assessment, and accountability. Documentation of this kind is widely recognized as a standard practice for demonstrating reasonable risk management.</p>
+      </section>
+
+      <!-- REGULATIONS -->
+      <section>
+        <h2>Key Regulatory References (Official Sources)</h2>
+        
+        <h3>European Union</h3>
+        <div class="reg-grid">
+          <div class="reg-card">
+            <h4>EU AI Act (Regulation (EU) 2024/1689)</h4>
+            <p>Full official text with transparency, human oversight, and documentation requirements for high-risk AI systems.</p>
+            <span class="source-label">Link to the source:</span>
+            <a class="source" href="https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng" target="_blank" rel="noopener noreferrer">eur-lex.europa.eu/eli/reg/2024/1689/oj/eng</a>
+            <p style="margin-top:8px;font-size:0.9rem"><strong>Key articles:</strong> 9–15 (risk management), 50 (transparency), 61 (conformity assessment). Most provisions apply from August 2, 2026.</p>
+          </div>
+        </div>
+
+        <h3>California, USA</h3>
+        <div class="reg-grid">
+          <div class="reg-card">
+            <h4>SB 53—Transparency in Frontier Artificial Intelligence Act (2025)</h4>
+            <p>Requirements for frontier AI developers: safety frameworks, catastrophic risk reporting, and transparency disclosures.</p>
+            <span class="source-label">Link to the source:</span>
+            <a class="source" href="https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260SB53" target="_blank" rel="noopener noreferrer">leginfo.legislature.ca.gov/.../SB53</a>
+          </div>
+          <div class="reg-card">
+            <h4>CCPA Regulations (2025 Updates: ADMT, Risk Assessments)</h4>
+            <p>Notice, opt-out, and audit trail requirements for automated decision-making technology affecting California consumers.</p>
+            <span class="source-label">Link to the source:</span>
+            <a class="source" href="https://cppa.ca.gov/regulations/ccpa_updates.html" target="_blank" rel="noopener noreferrer">cppa.ca.gov/regulations/ccpa_updates.html</a>
+            <p style="margin-top:8px;font-size:0.9rem"><strong>Effective:</strong> January 1, 2026 (ADMT provisions phase in through 2027).</p>
+          </div>
+        </div>
+
+        <h3>U.S. Federal (Voluntary Standard)</h3>
+        <div class="reg-grid">
+          <div class="reg-card">
+            <h4>NIST AI Risk Management Framework (AI RMF 1.0 + Generative AI Profile)</h4>
+            <p>Widely adopted voluntary framework for managing AI risks—including traceability, documentation, and governance practices.</p>
+            <span class="source-label">Link to the source:</span>
+            <a class="source" href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener noreferrer">nist.gov/itl/ai-risk-management-framework</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- JOURNAL TEMPLATE -->
+      <section>
+        <h2>UX Decision Journal—Entry Template</h2>
+        <p style="margin-bottom:20px">Fill this form directly on the page. When ready, click "Print / Save PDF" to generate a clean, shareable document.</p>
+        
+        <form class="journal-form" id="journalForm">
+          <div class="form-group">
+            <label for="entryId">Entry ID <span class="required" aria-hidden="true">*</span></label>
+            <input type="text" id="entryId" name="entryId" placeholder="e.g., AI-REC-001" required aria-required="true" />
+          </div>
+
+          <div class="form-group">
+            <label for="entryDate">Date <span class="required" aria-hidden="true">*</span></label>
+            <input type="date" id="entryDate" name="entryDate" required aria-required="true" />
+          </div>
+
+          <div class="form-group">
+            <label for="decisionTitle">Decision Title <span class="required" aria-hidden="true">*</span></label>
+            <input type="text" id="decisionTitle" name="decisionTitle" placeholder="e.g., Layered disclosure for AI-generated content" required aria-required="true" />
+          </div>
+
+          <div class="form-group">
+            <label for="authors">Authors / Contributors</label>
+            <input type="text" id="authors" name="authors" placeholder="Designer, PM, Legal (comma-separated)" />
+          </div>
+
+          <div class="form-group">
+            <label for="status">Status</label>
+            <select id="status" name="status">
+              <option value="Draft">Draft</option>
+              <option value="Under Review">Under Review</option>
+              <option value="Approved" selected>Approved</option>
+              <option value="Archived">Archived</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="decisionDesc">1. Decision Description <span class="required" aria-hidden="true">*</span></label>
+            <textarea id="decisionDesc" name="decisionDesc" placeholder="What changed in the UI/UX? Example: 'Added layered disclosure "AI-generated content" with Regenerate button and source link.'" required aria-required="true"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="risks">2. Context &amp; Risks Addressed</label>
+            <textarea id="risks" name="risks" placeholder="User impact and risks mitigated: transparency, bias mitigation, human oversight, hallucination handling, etc."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="evidence">3. Evidence Base</label>
+            <textarea id="evidence" name="evidence" placeholder="User research, A/B tests, legal review notes, competitive benchmarks, industry standards"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>4. Rejected Alternatives</label>
+            <div class="alternatives-list" id="alternativesList">
+              <div class="alternative-item">
+                <input type="text" placeholder="Alternative A description" style="margin-bottom:8px" />
+                <input type="text" placeholder="Reason for rejection" />
+              </div>
+            </div>
+            <button type="button" class="btn btn-secondary" id="addAlternative" style="margin-top:8px;font-size:0.9rem">+ Add another alternative</button>
+          </div>
+
+          <div class="form-group">
+            <label>5. Regulatory Alignment</label>
+            <div class="compliance-row">
+              <input type="text" placeholder="Regulation: e.g., EU AI Act Art. 50" id="regName" name="regName" />
+              <input type="text" placeholder="Specific requirement or section" id="regDetail" name="regDetail" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="monitoring">6. Monitoring Plan</label>
+            <textarea id="monitoring" name="monitoring" placeholder="Metrics (e.g., % using override, bias complaints), owner, review frequency"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="approval">7. Approval</label>
+            <input type="text" id="approval" name="approval" placeholder="Legal / Compliance / Product Lead signature + date" />
+          </div>
+
+          <div class="actions">
+            <button type="button" class="btn btn-primary" id="printFormBtn">🖨️ Print / Save PDF</button>
+            <button type="button" class="btn btn-secondary" id="exportBtn">📥 Export JSON</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- IMPLEMENTATION TIPS -->
+      <section>
+        <h2>Implementation Recommendations</h2>
+        <ul>
+          <li>Document all AI touchpoints: onboarding flows, generative tools, recommendation engines, error states, and disclosure patterns.</li>
+          <li>Integrate this template into your workflow: require a completed entry before handoff to engineering.</li>
+          <li>Store journals in a version-controlled system with access for legal/compliance stakeholders.</li>
+        </ul>
+      </section>
+
+      <!-- DOWNLOAD -->
+      <section class="download-section">
+        <h3 style="margin-bottom:12px">📥 Need a Clean Copy?</h3>
+        <p style="margin-bottom:16px">Click the "Print / Save PDF" button above to generate a printer-friendly version of your filled form. Works in any modern browser.</p>
+        <p style="font-size:0.9rem;color:var(--text-muted)"><strong>Tip:</strong> In the print dialog, choose "Save as PDF" to create a shareable file.</p>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer-note">
+      <p>This template and regulatory links reflect official sources as of April 3, 2026. Always verify current text on official government or standards-body websites, as regulatory frameworks may be updated.</p>
+      <p style="margin-top:8px"><strong>Neutral • Non-legal advice • For documentation purposes only</strong></p>
+      <p class="author-credit">
+        Created by <a href="https://www.linkedin.com/in/bondland" target="_blank" rel="noopener noreferrer">Alexander Bond</a>
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    // ===== THEME TOGGLE =====
+    const themeToggle = document.getElementById('themeToggle');
+    const htmlEl = document.documentElement;
+    
+    const savedTheme = localStorage.getItem('uxdj-theme') || 'dark';
+    htmlEl.setAttribute('data-theme', savedTheme);
+    
+    themeToggle.addEventListener('click', () => {
+      const current = htmlEl.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      htmlEl.setAttribute('data-theme', next);
+      localStorage.setItem('uxdj-theme', next);
+    });
+
+    // ===== SET TODAY'S DATE =====
+    document.getElementById('entryDate').valueAsDate = new Date();
+
+    // ===== DYNAMIC ALTERNATIVES =====
+    document.getElementById('addAlternative').addEventListener('click', function() {
+      const container = document.getElementById('alternativesList');
+      const item = document.createElement('div');
+      item.className = 'alternative-item';
+      item.innerHTML = `
+        <input type="text" placeholder="Alternative description" style="margin-bottom:8px" aria-label="Alternative description" />
+        <input type="text" placeholder="Reason for rejection" aria-label="Reason for rejection" />
+      `;
+      container.appendChild(item);
+    });
+
+    // ===== PRINT / SAVE PDF (FORM BUTTON) =====
+    document.getElementById('printFormBtn').addEventListener('click', function() {
+      window.print();
+    });
+
+    // ===== PRINT BUTTON (HEADER) =====
+    document.getElementById('printBtn').addEventListener('click', () => {
+      window.print();
+    });
+
+    // ===== EXPORT JSON =====
+    document.getElementById('exportBtn').addEventListener('click', function() {
+      const entry = {
+        id: document.getElementById('entryId').value,
+        date: document.getElementById('entryDate').value,
+        title: document.getElementById('decisionTitle').value,
+        authors: document.getElementById('authors').value,
+        status: document.getElementById('status').value,
+        description: document.getElementById('decisionDesc').value,
+        risks: document.getElementById('risks').value,
+        evidence: document.getElementById('evidence').value,
+        alternatives: Array.from(document.querySelectorAll('.alternative-item')).map(item => ({
+          desc: item.querySelectorAll('input')[0].value,
+          reason: item.querySelectorAll('input')[1].value
+        })),
+        compliance: {
+          regulation: document.getElementById('regName').value,
+          requirement: document.getElementById('regDetail').value
+        },
+        monitoring: document.getElementById('monitoring').value,
+        approval: document.getElementById('approval').value,
+        exportedAt: new Date().toISOString()
+      };
+
+      const blob = new Blob([JSON.stringify(entry, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ux-decision-${entry.id || 'entry'}-${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // ===== ACCESSIBILITY: FOCUS MANAGEMENT FOR DYNAMIC ELEMENTS =====
+    document.getElementById('addAlternative').addEventListener('click', function() {
+      const newItem = this.closest('.form-group').querySelector('.alternative-item:last-child');
+      if (newItem) {
+        const firstInput = newItem.querySelector('input');
+        if (firstInput) firstInput.focus();
+      }
+    });
+  </script>
+</body>
+</html>
